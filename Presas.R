@@ -1,0 +1,164 @@
+#librerias
+library(dplyr)
+library(tidyr)
+library(readr)
+library(ggplot2)
+
+#1 Verificar si los datos se pueden leer
+# Leer un archivo CSV y guardarlo como un data frame
+marzo_25 <- read.csv("Reporte_Presas_2025-03-01.csv")
+marzo_24 <- read.csv("Reporte_Presas_2024-03-01.csv")
+marzo_23 <- read.csv("Reporte_Presas_2023-03-01.csv")
+marzo_15 <- read.csv("Reporte_Presas_2015-03-01.csv")
+marzo_14 <- read.csv("Reporte_Presas_2014-03-01.csv")
+marzo_13 <- read.csv("Reporte_Presas_2013-03-01.csv")
+marzo_05 <- read.csv("Reporte_Presas_2005-03-01.csv")
+marzo_04 <- read.csv("Reporte_Presas_2004-03-01.csv")
+marzo_03 <- read.csv("Reporte_Presas_2003-03-01.csv")
+marzo_95 <- read.csv("Reporte_Presas_1995-03-01.csv")
+marzo_94 <- read.csv("Reporte_Presas_1994-03-01.csv")
+marzo_93 <- read.csv("Reporte_Presas_1993-03-01.csv")
+
+# 2. Mostrar las primeras filas del data frame
+head(marzo_25)
+
+# 3. tipos de variables presentes
+str(marzo_25)
+
+
+#4. tiene datos nulos(NA)
+any(is.na(marzo_25))
+any(is.na(marzo_24))
+any(is.na(marzo_23))
+any(is.na(marzo_15))
+any(is.na(marzo_14))
+any(is.na(marzo_13))
+any(is.na(marzo_05))
+any(is.na(marzo_04))
+any(is.na(marzo_03))
+any(is.na(marzo_95))
+any(is.na(marzo_94))
+any(is.na(marzo_93))
+
+
+#5. Agrupa los datos por decadas
+# 5.1 Agrega una columna a cada dataframe con la fecha en que se obtienen 
+# los datos, es parte del nombre de archivo 
+marzo_25 <- marzo_25 %>% mutate(año = 2025, decada = 2020)
+marzo_24 <- marzo_24 %>% mutate(año = 2024, decada = 2020)
+marzo_23 <- marzo_23 %>% mutate(año = 2023, decada = 2020) 
+marzo_15 <- marzo_15 %>% mutate(año = 2015, decada = 2010)
+marzo_14 <- marzo_14 %>% mutate(año = 2014, decada = 2010)
+marzo_13 <- marzo_13 %>% mutate(año = 2013, decada = 2010)
+marzo_05 <- marzo_05 %>% mutate(año = 2005, decada = 2000)
+marzo_04 <- marzo_04 %>% mutate(año = 2004, decada = 2000)
+marzo_03 <- marzo_03 %>% mutate(año = 2003, decada = 2000)
+marzo_95 <- marzo_95 %>% mutate(año = 1995, decada = 1990)
+marzo_94 <- marzo_94 %>% mutate(año = 1994, decada = 1990)
+marzo_93 <- marzo_93 %>% mutate(año = 1993, decada = 1990)
+
+
+# 5.2. Unir por decadas
+decada_2020 <- bind_rows(marzo_25, marzo_24, marzo_23)
+decada_2010 <- bind_rows(marzo_15, marzo_14, marzo_13)
+decada_2000 <- bind_rows(marzo_05, marzo_04, marzo_03)
+decada_1990 <- bind_rows(marzo_95, marzo_94, marzo_93)
+
+# 6. Selecciona solo las columnas de interes: nombre comun, entidad, 
+# almacenaje actual, % de llenado, año y decada. 
+decada_2020 <- decada_2020 %>% select(Nombre.común, Entidad.federativa, 
+                                      Almacenamiento.Actual..hm.., 
+                                      X..de.llenado.actual, decada, año)
+decada_2010 <- decada_2010 %>% select(Nombre.común, Entidad.federativa, 
+                                      Almacenamiento.Actual..hm.., 
+                                      X..de.llenado.actual,decada, año)
+decada_2000 <- decada_2000 %>% select(Nombre.común, Entidad.federativa, 
+                                      Almacenamiento.Actual..hm.., 
+                                      X..de.llenado.actual, decada, año)
+decada_1990 <- decada_1990 %>% select(Nombre.común, Entidad.federativa, 
+                                      Almacenamiento.Actual..hm.., 
+                                      X..de.llenado.actual, decada, año)
+
+#7. conoce la estructura general de los dato con summary
+summary(decada_2020)
+summary(decada_2010)
+summary(decada_2000)
+summary(decada_1990)
+
+
+
+# 8. buscar existencia de NA 
+any(is.na(decada_2020))
+any(is.na(decada_2000$X..de.llenado.actual)) 
+any(is.na(decada_2010))
+any(is.na(decada_2000))
+any(is.na(decada_1990))
+
+
+# 8.1 Remover filas con valores NA
+decada_2020_sin_na <- decada_2020 %>% drop_na()
+decada_2010_sin_na <- decada_2010 %>% drop_na()
+decada_2000_sin_na <- decada_2000 %>% drop_na()
+decada_1990_sin_na <- decada_1990 %>% drop_na()
+
+# 9. convetir a nuemerico la columna % de llenado actual y la de almacenamiento
+decada_2020_sin_na <- decada_2020_sin_na %>%
+  mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada_2010_sin_na <- decada_2010_sin_na %>% 
+  mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada_2000_sin_na <- decada_2000_sin_na %>% 
+  mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada_1990_sin_na <- decada_1990_sin_na %>% 
+  mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+
+#9.1 confirmar tipo de variable
+str(decada_2020_sin_na$X..de.llenado.actual)
+str(decada_2020_sin_na$Almacenamiento.Actual..hm..)
+
+# 9.2 Conoce la esctuctura general de los datos con summary
+summary(decada_2020_sin_na)
+
+#10. Calcular medidas de tendencia central para el almacenamiento actual
+#10.1 Promedio
+print ("Promedio almacenamiento el 1 de marzo de la decada 2020") 
+mean(decada_2020_sin_na$Almacenamiento.Actual..hm..)
+print ("Promedio almacenamiento el 1 de marzo de la decada 2010") 
+mean(decada_2010$Almacenamiento.Actual..hm..)
+print ("Promedio almacenamiento el 1 de marzo de la decada 2000") 
+mean(decada_2000$Almacenamiento.Actual..hm..)
+print ("Promedio almacenamiento el 1 de marzo de la decada 1990") 
+mean(decada_1990$Almacenamiento.Actual..hm..)
+
+#10.2 Mediana
+print ("Mediana de almacenamiento el 1 de marzo de la decada 2020") 
+median(decada_2020_sin_na$Almacenamiento.Actual..hm..)
+print ("mediana de almacenamiento el 1 de marzo de la decada 2010") 
+median(decada_2010$Almacenamiento.Actual..hm..)
+print ("mediana de almacenamiento el 1 de marzo de la decada 2000") 
+median(decada_2000$Almacenamiento.Actual..hm..)
+print ("Mediana de almacenamiento el 1 de marzo de la decada 1990") 
+median(decada_1990$Almacenamiento.Actual..hm..)
+
+#11 Unir todos los datos en un dataframe
+df_presas_total <- bind_rows(decada_2020_sin_na, decada_2010_sin_na, decada_2000_sin_na, decada_1990_sin_na)
+
+#12. Realizar un grafico facetado por decada de las variables almacenamiento y %
+#12.1 Almacenamiento actual
+ggplot(df_presas_total, aes(x = Entidad.federativa, y= Almacenamiento.Actual..hm..)) +
+  geom_boxplot(fill = "steelblue") +
+  facet_wrap(~ decada) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Distribución de llenado por entidad y década",
+       x = "Entidad",
+       y = "Almacenamiento en hm")
+
+
+#12.2 % de llenado actual
+ggplot(df_presas_total, aes(x = X..de.llenado.actual)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+  facet_wrap(~ decada, scales = "free_y") +
+  theme_minimal() +
+  labs(title = "Distribución de llenado por década",
+       x = "% de llenado actual",
+       y = "Frecuencia")

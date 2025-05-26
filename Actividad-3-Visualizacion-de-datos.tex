@@ -1,0 +1,234 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\#--- \#title: ``Actividad 3 Visualizacion de datos'' \#author:
+``Angélica Benítez'' \#date: ``2025-05-22'' \#output: word\_document
+\#editor\_options: markdown: \# wrap: 72 \#---
+
+\#librerias
+
+library(dplyr) library(tidyr) library(readr) library(ggplot2)
+
+\#1 Verificar si los datos se pueden leer \# Leer un archivo CSV y
+\#guardarlo como un data frame marzo\_25 \textless-
+read.csv(``Reporte\_Presas\_2025-03-01.csv'') marzo\_24 \textless-
+read.csv(``Reporte\_Presas\_2024-03-01.csv'') marzo\_23 \textless-
+read.csv(``Reporte\_Presas\_2023-03-01.csv'') marzo\_15 \textless-
+read.csv(``Reporte\_Presas\_2015-03-01.csv'') marzo\_14 \textless-
+read.csv(``Reporte\_Presas\_2014-03-01.csv'') marzo\_13 \textless-
+read.csv(``Reporte\_Presas\_2013-03-01.csv'') marzo\_05 \textless-
+read.csv(``Reporte\_Presas\_2005-03-01.csv'') marzo\_04 \textless-
+read.csv(``Reporte\_Presas\_2004-03-01.csv'') marzo\_03 \textless-
+read.csv(``Reporte\_Presas\_2003-03-01.csv'') marzo\_95 \textless-
+read.csv(``Reporte\_Presas\_1995-03-01.csv'') marzo\_94 \textless-
+read.csv(``Reporte\_Presas\_1994-03-01.csv'') marzo\_93 \textless-
+read.csv(``Reporte\_Presas\_1993-03-01.csv'')
+
+\section{2. Mostrar las primeras filas del data
+frame}\label{mostrar-las-primeras-filas-del-data-frame}
+
+head(marzo\_25)
+
+\section{3. tipos de variables
+presentes}\label{tipos-de-variables-presentes}
+
+str(marzo\_25)
+
+\#4. tiene datos nulos(NA) any(is.na(marzo\_25)) any(is.na(marzo\_24))
+any(is.na(marzo\_23)) any(is.na(marzo\_15)) any(is.na(marzo\_14))
+any(is.na(marzo\_13)) any(is.na(marzo\_05)) any(is.na(marzo\_04))
+any(is.na(marzo\_03)) any(is.na(marzo\_95)) any(is.na(marzo\_94))
+any(is.na(marzo\_93))
+
+\#5. Agrupa los datos por decadas \# 5.1 Agrega una columna a cada
+\#dataframe con la fecha en que se obtienen \# los datos, es parte del
+\#nombre de archivo marzo\_25 \textless- marzo\_25 \%\textgreater\%
+mutate(año = 2025, decada = 2020) marzo\_24 \textless- marzo\_24
+\%\textgreater\% mutate(año = 2024, decada = 2020) marzo\_23 \textless-
+marzo\_23 \%\textgreater\% mutate(año = 2023, decada = 2020) marzo\_15
+\textless- marzo\_15 \%\textgreater\% mutate(año = 2015, decada = 2010)
+marzo\_14 \textless- marzo\_14 \%\textgreater\% mutate(año = 2014,
+decada = 2010) marzo\_13 \textless- marzo\_13 \%\textgreater\%
+mutate(año = 2013, decada = 2010) marzo\_05 \textless- marzo\_05
+\%\textgreater\% mutate(año = 2005, decada = 2000) marzo\_04 \textless-
+marzo\_04 \%\textgreater\% mutate(año = 2004, decada = 2000) marzo\_03
+\textless- marzo\_03 \%\textgreater\% mutate(año = 2003, decada = 2000)
+marzo\_95 \textless- marzo\_95 \%\textgreater\% mutate(año = 1995,
+decada = 1990) marzo\_94 \textless- marzo\_94 \%\textgreater\%
+mutate(año = 1994, decada = 1990) marzo\_93 \textless- marzo\_93
+\%\textgreater\% mutate(año = 1993, decada = 1990)
+
+\section{5.2. Unir por decadas}\label{unir-por-decadas}
+
+decada\_2020 \textless- bind\_rows(marzo\_25, marzo\_24, marzo\_23)
+decada\_2010 \textless- bind\_rows(marzo\_15, marzo\_14, marzo\_13)
+decada\_2000 \textless- bind\_rows(marzo\_05, marzo\_04, marzo\_03)
+decada\_1990 \textless- bind\_rows(marzo\_95, marzo\_94, marzo\_93)
+
+\section{6. Selecciona solo las columnas de interes: nombre comun,
+entidad,}\label{selecciona-solo-las-columnas-de-interes-nombre-comun-entidad}
+
+\section{almacenaje actual, \% de llenado, año y
+decada.}\label{almacenaje-actual-de-llenado-auxf1o-y-decada.}
+
+decada\_2020 \textless- decada\_2020 \%\textgreater\%
+select(Nombre.común, Entidad.federativa, Almacenamiento.Actual..hm..,
+X..de.llenado.actual, decada, año) decada\_2010 \textless- decada\_2010
+\%\textgreater\% select(Nombre.común, Entidad.federativa,
+Almacenamiento.Actual..hm.., X..de.llenado.actual,decada, año)
+decada\_2000 \textless- decada\_2000 \%\textgreater\%
+select(Nombre.común, Entidad.federativa, Almacenamiento.Actual..hm..,
+X..de.llenado.actual, decada, año) decada\_1990 \textless- decada\_1990
+\%\textgreater\% select(Nombre.común, Entidad.federativa,
+Almacenamiento.Actual..hm.., X..de.llenado.actual, decada, año)
+
+\#7. conoce la estructura general de los dato con summary
+summary(decada\_2020) summary(decada\_2010) summary(decada\_2000)
+summary(decada\_1990)
+
+\section{8. buscar existencia de NA}\label{buscar-existencia-de-na}
+
+any(is.na(decada\_2020)) any(is.na(decada\_2020\$X..de.llenado.actual))
+any(is.na(decada\_2010)) any(is.na(decada\_2000))
+any(is.na(decada\_1990))
+
+\section{8.1 Remover filas con valores
+NA}\label{remover-filas-con-valores-na}
+
+decada\_2020\_sin\_na \textless- decada\_2020 \%\textgreater\%
+drop\_na() decada\_2010\_sin\_na \textless- decada\_2010
+\%\textgreater\% drop\_na() decada\_2000\_sin\_na \textless-
+decada\_2000 \%\textgreater\% drop\_na() decada\_1990\_sin\_na
+\textless- decada\_1990 \%\textgreater\% drop\_na()
+
+\section{9. convetir a nuemerico la columna \% de llenado actual y la de
+almacenamiento}\label{convetir-a-nuemerico-la-columna-de-llenado-actual-y-la-de-almacenamiento}
+
+decada\_2020\_sin\_na \textless- decada\_2020\_sin\_na \%\textgreater\%
+mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada\_2010\_sin\_na \textless- decada\_2010\_sin\_na \%\textgreater\%
+mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada\_2000\_sin\_na \textless- decada\_2000\_sin\_na \%\textgreater\%
+mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+decada\_1990\_sin\_na \textless- decada\_1990\_sin\_na \%\textgreater\%
+mutate(X..de.llenado.actual = as.numeric(X..de.llenado.actual))
+
+\#9.1 confirmar tipo de variable
+str(decada\_2020\_sin\_na\(X..de.llenado.actual)
+str(decada_2020_sin_na\)Almacenamiento.Actual..hm..)
+
+\section{9.2 Conoce la esctuctura general de los datos con
+summary}\label{conoce-la-esctuctura-general-de-los-datos-con-summary}
+
+summary(decada\_2020\_sin\_na)
+
+\#10. Calcular medidas de tendencia central para el almacenamiento
+actual
+
+\#10.1 Promedio mean(decada\_2020\_sin\_na\(Almacenamiento.Actual..hm..)
+print ("Promedio almacenamiento el 1 de marzo de la decada 2010")
+mean(decada_2010\)Almacenamiento.Actual..hm..) print (``Promedio
+almacenamiento el 1 de marzo de la decada 2000'')
+mean(decada\_2000\(Almacenamiento.Actual..hm..)
+print ("Promedio almacenamiento el 1 de marzo de la decada 1990")
+mean(decada_1990\)Almacenamiento.Actual..hm..)
+
+\#10.2 Mediana print (``Mediana de almacenamiento el 1 de marzo de la
+decada 2020'')
+median(decada\_2020\_sin\_na\(Almacenamiento.Actual..hm..)
+print ("mediana de almacenamiento el 1 de marzo de la decada 2010")
+median(decada_2010\)Almacenamiento.Actual..hm..) print (``mediana de
+almacenamiento el 1 de marzo de la decada 2000'')
+median(decada\_2000\(Almacenamiento.Actual..hm..)
+print ("Mediana de almacenamiento el 1 de marzo de la decada 1990")
+median(decada_1990\)Almacenamiento.Actual..hm..)
+
+\#11 Unir todos los datos en un dataframe df\_presas\_total \textless-
+bind\_rows(decada\_2020\_sin\_na, decada\_2010\_sin\_na,
+decada\_2000\_sin\_na, decada\_1990\_sin\_na)
+
+\#12. Realizar un grafico facetado por decada de las variables
+\#almacenamiento y \% de llenado
+
+\#12.1 Almacenamiento actual ggplot(df\_presas\_total, aes(x =
+Entidad.federativa, y = Almacenamiento.Actual..hm..)) +
+geom\_boxplot(fill = ``steelblue'') + facet\_wrap(\textasciitilde{}
+decada) + theme\_minimal() + theme(axis.text.x = element\_text(angle =
+45, hjust = 1)) + labs(title = ``Distribución de llenado por entidad y
+década'', x = ``Entidad'', y = ``Almacenamiento en hm'')
+
+\#12.2 \% de llenado actual ggplot(df\_presas\_total, aes(x =
+X..de.llenado.actual)) + geom\_histogram(bins = 30, fill =
+``steelblue'', color = ``white'') + facet\_wrap(\textasciitilde{}
+decada, scales = ``free\_y'') + theme\_minimal() + labs(title =
+``Distribución de llenado por década'', x = ``\% de llenado actual'', y
+= ``Frecuencia'')
+
+\end{document}
